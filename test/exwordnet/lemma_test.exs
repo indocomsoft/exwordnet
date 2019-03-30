@@ -1,5 +1,5 @@
 defmodule ExWordNet.LemmaTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias ExWordNet.Lemma
 

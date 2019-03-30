@@ -1,5 +1,5 @@
 defmodule ExWordNet.SynsetTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias ExWordNet.Synset
 
