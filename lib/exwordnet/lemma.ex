@@ -48,25 +48,51 @@ defmodule ExWordNet.Lemma do
           {:ok, __MODULE__.t()} | {:error, any()}
   def find(word, part_of_speech)
       when is_binary(word) and ExWordNet.Constants.is_part_of_speech(part_of_speech) do
-    path = ExWordNet.Config.db() |> Path.join("dict") |> Path.join("index.#{part_of_speech}")
-
-    case File.read(path) do
-      {:ok, content} ->
-        content
-        |> String.split("\n", trim: true)
-        |> Enum.with_index()
-        |> Enum.find(nil, fn {line, _} ->
-          [index_word | _] = String.split(line, " ", parts: 2)
-          word == index_word
-        end)
-        |> lemma_from_entry()
-        |> case do
+    case lookup_index(word, part_of_speech) do
+      {:ok, {id, line}} ->
+        case lemma_from_entry({line, id}) do
           result = %__MODULE__{} -> {:ok, result}
           _ -> {:error, nil}
         end
 
       {:error, reason} ->
         {:error, reason}
+    end
+  end
+
+  defp lookup_index(word, part_of_speech)
+       when is_binary(word) and ExWordNet.Constants.is_part_of_speech(part_of_speech) do
+    case :ets.info(part_of_speech) do
+      :undefined ->
+        :ets.new(part_of_speech, [:named_table])
+        path = ExWordNet.Config.db() |> Path.join("dict") |> Path.join("index.#{part_of_speech}")
+
+        case File.read(path) do
+          {:ok, content} ->
+            index =
+              content
+              |> String.split("\n", trim: true)
+              |> Enum.with_index()
+              |> Enum.map(fn {line, index} ->
+                [index_word | _] = String.split(line, " ", parts: 2)
+                {index_word, {index + 1, line}}
+              end)
+
+            :ets.insert(part_of_speech, index)
+            lookup_index(word, part_of_speech)
+
+          {:error, reason} ->
+            {:error, reason}
+        end
+
+      _ ->
+        case :ets.lookup(part_of_speech, word) do
+          [{^word, {id, line}}] ->
+            {:ok, {id, line}}
+
+          [] ->
+            {:error, :not_found}
+        end
     end
   end
 
