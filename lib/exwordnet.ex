@@ -1,6 +1,6 @@
-defmodule Exwordnet do
+defmodule ExWordNet do
   @moduledoc """
-  Documentation for Exwordnet.
+  Documentation for ExWordNet.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule Exwordnet do
 
   ## Examples
 
-      iex> Exwordnet.hello()
+      iex> ExWordNet.hello()
       :world
 
   """

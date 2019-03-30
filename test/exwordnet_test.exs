@@ -1,8 +1,4 @@
-defmodule ExwordnetTest do
+defmodule ExWordNetTest do
   use ExUnit.Case
-  doctest Exwordnet
-
-  test "greets the world" do
-    assert Exwordnet.hello() == :world
-  end
+  doctest ExWordNet
 end

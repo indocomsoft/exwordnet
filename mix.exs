@@ -1,4 +1,4 @@
-defmodule Exwordnet.MixProject do
+defmodule ExWordNet.MixProject do
   use Mix.Project
 
   def project do
