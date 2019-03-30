@@ -62,7 +62,7 @@ defmodule ExWordNet.Lemma do
 
   defp lookup_index(word, part_of_speech)
        when is_binary(word) and is_atom_part_of_speech(part_of_speech) do
-    case :ets.info(part_of_speech) do
+    case :ets.whereis(part_of_speech) do
       :undefined ->
         case load_index(part_of_speech) do
           :ok -> lookup_index(word, part_of_speech)
