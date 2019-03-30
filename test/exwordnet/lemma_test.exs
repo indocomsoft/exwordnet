@@ -8,7 +8,7 @@ defmodule ExWordNet.LemmaTest do
       {:ok, lemma} = Lemma.find("fruit", :noun)
 
       assert lemma == %ExWordNet.Lemma{
-               id: 41088,
+               id: 41_088,
                part_of_speech: :noun,
                pointer_symbols: ["@", "~", "+"],
                synset_offsets: [13_134_947, 4_612_722, 7_294_550],
@@ -41,7 +41,7 @@ defmodule ExWordNet.LemmaTest do
 
       assert result == [
                %ExWordNet.Lemma{
-                 id: 41088,
+                 id: 41_088,
                  part_of_speech: :noun,
                  pointer_symbols: ["@", "~", "+"],
                  synset_offsets: [13_134_947, 4_612_722, 7_294_550],
