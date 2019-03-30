@@ -61,16 +61,18 @@ defmodule ExWordNet.Synset do
 
   defp process_line(line, part_of_speech)
        when is_binary(line) and ExWordNet.Constants.is_synset_part_of_speech(part_of_speech) do
+    IO.inspect(line)
     [info_line, gloss] = line |> String.trim() |> String.split(" | ", parts: 2)
     [_synset_offset, _lex_filenum, _synset_type, word_count | xs] = String.split(info_line, " ")
-    word_count = String.to_integer(word_count)
+    {word_count, _} = Integer.parse(word_count, 16)
     {words_list, _} = Enum.split(xs, word_count * 2)
 
     word_counts =
       words_list
       |> Enum.chunk_every(2)
       |> Enum.reduce(%{}, fn [word, count], acc ->
-        Map.put(acc, word, String.to_integer(count))
+        {count, _} = Integer.parse(count, 16)
+        Map.put(acc, word, count)
       end)
 
     # TODO: Read pointers
