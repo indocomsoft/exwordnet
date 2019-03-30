@@ -10,6 +10,13 @@ instead it can work directly on the database that comes with WordNet.
 
 `ExWordNet` is inspired by the Ruby project ![rwordnet](https://github.com/doches/rwordnet).
 
+## Note
+
+`ExWordNet` comes bundled with the WordNet database which it uses by default.
+However, hex package manager has a maximum tarball size of 8MB, hence the database is xz-compressed.
+As such, `ExWordNet` requires `xz` and `tar` to be installed. During the first run, the database
+will be uncompressed automatically.
+
 ## Installation
 
 The package can be installed by adding `exwordnet` to your list of dependencies in `mix.exs`:
@@ -22,7 +29,8 @@ def deps do
 end
 ```
 
-`ExWordNet` comes bundled with the WordNet database which it uses by default,
-so there's absolutely nothing else to download, install, or configure.
-
 The docs can be found at [https://hexdocs.pm/exwordnet](https://hexdocs.pm/exwordnet).
+
+## Requirement
+1. Elixir 1.8
+1. `tar` and `xz`
