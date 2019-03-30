@@ -4,7 +4,7 @@ defmodule ExWordNet.MixProject do
   def project do
     [
       app: :exwordnet,
-      version: "0.1.4",
+      version: "0.1.5",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
