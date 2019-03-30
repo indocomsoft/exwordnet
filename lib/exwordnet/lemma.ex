@@ -19,21 +19,21 @@ defmodule ExWordNet.Lemma do
 
   @type t() :: %__MODULE__{
           word: String.t(),
-          part_of_speech: String.t(),
+          part_of_speech: ExWordNet.Constants.PartsOfSpeech.atom_part_of_speech(),
           synset_offsets: [integer()],
           id: integer(),
           pointer_symbols: [String.t()],
           tagsense_count: integer()
         }
 
-  require ExWordNet.Constants
+  import ExWordNet.Constants.PartsOfSpeech
 
   @doc """
   Finds all lemmas for this word across all known parts of speech.
   """
   @spec find_all(String.t()) :: [__MODULE__.t()]
   def find_all(word) when is_binary(word) do
-    Enum.flat_map(ExWordNet.Constants.parts_of_speech(), fn part_of_speech ->
+    Enum.flat_map(atom_parts_of_speech(), fn part_of_speech ->
       case find(word, part_of_speech) do
         {:ok, lemma} when not is_nil(lemma) -> [lemma]
         _ -> []
@@ -44,10 +44,10 @@ defmodule ExWordNet.Lemma do
   @doc """
   Find a lemma for a given word and part of speech.
   """
-  @spec find(String.t(), ExWordNet.Constants.part_of_speech()) ::
+  @spec find(String.t(), ExWordNet.Constants.PartsOfSpeech.atom_part_of_speech()) ::
           {:ok, __MODULE__.t()} | {:error, any()}
   def find(word, part_of_speech)
-      when is_binary(word) and ExWordNet.Constants.is_part_of_speech(part_of_speech) do
+      when is_binary(word) and is_atom_part_of_speech(part_of_speech) do
     case lookup_index(word, part_of_speech) do
       {:ok, {id, line}} ->
         case lemma_from_entry({line, id}) do
@@ -61,7 +61,7 @@ defmodule ExWordNet.Lemma do
   end
 
   defp lookup_index(word, part_of_speech)
-       when is_binary(word) and ExWordNet.Constants.is_part_of_speech(part_of_speech) do
+       when is_binary(word) and is_atom_part_of_speech(part_of_speech) do
     case :ets.info(part_of_speech) do
       :undefined ->
         case load_index(part_of_speech) do
@@ -80,7 +80,7 @@ defmodule ExWordNet.Lemma do
     end
   end
 
-  defp load_index(part_of_speech) do
+  defp load_index(part_of_speech) when is_atom_part_of_speech(part_of_speech) do
     :ets.new(part_of_speech, [:named_table])
     path = ExWordNet.Config.db() |> Path.join("dict") |> Path.join("index.#{part_of_speech}")
 
@@ -110,7 +110,7 @@ defmodule ExWordNet.Lemma do
   """
   @spec synsets(__MODULE__.t()) :: [ExWordNet.Synset.t()]
   def synsets(%__MODULE__{synset_offsets: synset_offsets, part_of_speech: part_of_speech})
-      when is_binary(part_of_speech) and is_list(synset_offsets) do
+      when is_atom_part_of_speech(part_of_speech) and is_list(synset_offsets) do
     Enum.flat_map(synset_offsets, fn synset_offset ->
       case ExWordNet.Synset.new(part_of_speech, synset_offset) do
         {:ok, synset = %ExWordNet.Synset{}} -> [synset]
@@ -128,7 +128,7 @@ defmodule ExWordNet.Lemma do
 
     %__MODULE__{
       word: word,
-      part_of_speech: part_of_speech,
+      part_of_speech: short_to_atom_part_of_speech(part_of_speech),
       synset_offsets: Enum.map(synset_offsets, &String.to_integer/1),
       id: id + 1,
       pointer_symbols: pointers,
@@ -138,5 +138,15 @@ defmodule ExWordNet.Lemma do
 
   defp lemma_from_entry(_) do
     nil
+  end
+end
+
+defimpl String.Chars, for: ExWordNet.Lemma do
+  import ExWordNet.Constants.PartsOfSpeech
+
+  def to_string(%ExWordNet.Lemma{word: word, part_of_speech: part_of_speech})
+      when is_binary(word) and is_atom_part_of_speech(part_of_speech) do
+    short_part_of_speech = atom_to_short_part_of_speech(part_of_speech)
+    "#{word}, #{short_part_of_speech}"
   end
 end

@@ -22,7 +22,7 @@ defmodule ExWordNet.Synset do
           gloss: String.t()
         }
 
-  require ExWordNet.Constants
+  import ExWordNet.Constants.PartsOfSpeech
 
   @doc """
   Creates an `ExWordNet.Synset` struct by reading from the data file specified by `part_of_speech`,
@@ -33,11 +33,11 @@ defmodule ExWordNet.Synset do
   """
   @spec new(String.t(), integer()) :: {:ok, __MODULE__.t()} | {:error, any()}
   def new(part_of_speech, offset)
-      when ExWordNet.Constants.is_synset_part_of_speech(part_of_speech) and is_integer(offset) do
+      when is_atom_part_of_speech(part_of_speech) and is_integer(offset) do
     path =
       ExWordNet.Config.db()
       |> Path.join("dict")
-      |> Path.join("data.#{ExWordNet.Constants.synset_types()[part_of_speech]}")
+      |> Path.join("data.#{part_of_speech}")
 
     with {:ok, file} <- File.open(path),
          {:ok, _} <- :file.position(file, offset),
@@ -60,7 +60,7 @@ defmodule ExWordNet.Synset do
   end
 
   defp process_line(line, part_of_speech)
-       when is_binary(line) and ExWordNet.Constants.is_synset_part_of_speech(part_of_speech) do
+       when is_binary(line) and is_atom_part_of_speech(part_of_speech) do
     [info_line, gloss] = line |> String.trim() |> String.split(" | ", parts: 2)
     [_synset_offset, _lex_filenum, _synset_type, word_count | xs] = String.split(info_line, " ")
     {word_count, _} = Integer.parse(word_count, 16)
