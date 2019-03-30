@@ -17,7 +17,7 @@ defmodule ExWordNet.Synset do
   defstruct @enforce_keys
 
   @type t :: %__MODULE__{
-          part_of_speech: String.t(),
+          part_of_speech: ExWordNet.Constants.PartsOfSpeech.atom_part_of_speech(),
           word_counts: %{required(String.t()) => integer()},
           gloss: String.t()
         }
@@ -31,7 +31,8 @@ defmodule ExWordNet.Synset do
   This is how the WordNet database is organized. You shouldn't be calling this function directly;
   instead, use `ExWordNet.Lemma.synsets/1`
   """
-  @spec new(String.t(), integer()) :: {:ok, __MODULE__.t()} | {:error, any()}
+  @spec new(ExWordNet.Constants.PartsOfSpeech.atom_part_of_speech(), integer()) ::
+          {:ok, __MODULE__.t()} | {:error, any()}
   def new(part_of_speech, offset)
       when is_atom_part_of_speech(part_of_speech) and is_integer(offset) do
     path =

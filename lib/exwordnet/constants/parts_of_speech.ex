@@ -20,7 +20,7 @@ defmodule ExWordNet.Constants.PartsOfSpeech do
     end
   end
 
-  @spec short_parts_of_speech :: %{required(String.t()) => atom_part_of_speech()}
+  @spec short_parts_of_speech :: [String.t()]
   def short_parts_of_speech, do: @short_parts_of_speech
 
   defmacro is_short_part_of_speech(part_of_speech) do
