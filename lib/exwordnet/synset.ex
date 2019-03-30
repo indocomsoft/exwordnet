@@ -80,3 +80,19 @@ defmodule ExWordNet.Synset do
     %__MODULE__{part_of_speech: part_of_speech, word_counts: word_counts, gloss: gloss}
   end
 end
+
+defimpl String.Chars, for: ExWordNet.Synset do
+  import ExWordNet.Constants.PartsOfSpeech
+
+  def to_string(synset = %ExWordNet.Synset{part_of_speech: part_of_speech, gloss: gloss})
+      when is_atom_part_of_speech(part_of_speech) and is_binary(gloss) do
+    words =
+      synset
+      |> ExWordNet.Synset.words()
+      |> Enum.map(&String.replace(&1, "_", " "))
+      |> Enum.join(", ")
+
+    short_part_of_speech = atom_to_short_part_of_speech(part_of_speech)
+    "(#{short_part_of_speech}) #{words} (#{gloss})"
+  end
+end
