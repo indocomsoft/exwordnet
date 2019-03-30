@@ -12,7 +12,7 @@ defmodule ExWordNet.Config do
   Also extracts the compressed database.
   """
   def db do
-    priv = :code.priv_dir(:exwordnet)
+    priv = :exwordnet |> :code.priv_dir() |> to_string()
 
     db = Path.join(priv, @db_name)
 
