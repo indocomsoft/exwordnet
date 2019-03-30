@@ -18,7 +18,7 @@ defmodule ExWordNet.Constants do
     end
   end
 
-  @spec synset_types :: [String.t()]
+  @spec synset_types :: %{required(String.t()) => part_of_speech()}
   def synset_types, do: @synset_types
 
   defmacro is_synset_part_of_speech(part_of_speech) do
