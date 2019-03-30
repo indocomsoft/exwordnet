@@ -3,7 +3,7 @@ defmodule ExWordNet.Config do
   Contains the configurable settings of ExWordNet
   """
 
-  @db "priv/WordNet-3.0"
+  @db_name "WordNet-3.0"
 
   # TODO: Make the db location configurable
   @doc """
@@ -12,10 +12,14 @@ defmodule ExWordNet.Config do
   Also extracts the compressed database.
   """
   def db do
-    if not File.exists?(@db) do
-      {_, 0} = System.cmd("tar", ["xf", @db <> ".tar.xz", "-C", "priv/"])
+    priv = :code.priv_dir(:exwordnet)
+
+    db = Path.join(priv, @db_name)
+
+    if not File.exists?(db) do
+      {_, 0} = System.cmd("tar", ["xf", db <> ".tar.xz", "-C", priv])
     end
 
-    @db
+    db
   end
 end
