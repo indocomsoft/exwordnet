@@ -61,7 +61,6 @@ defmodule ExWordNet.Synset do
 
   defp process_line(line, part_of_speech)
        when is_binary(line) and ExWordNet.Constants.is_synset_part_of_speech(part_of_speech) do
-    IO.inspect(line)
     [info_line, gloss] = line |> String.trim() |> String.split(" | ", parts: 2)
     [_synset_offset, _lex_filenum, _synset_type, word_count | xs] = String.split(info_line, " ")
     {word_count, _} = Integer.parse(word_count, 16)
