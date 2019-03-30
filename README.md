@@ -1,11 +1,18 @@
-# Exwordnet
+# ExWordNet
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.com/indocomsoft/exwordnet.svg?branch=master)](https://travis-ci.com/indocomsoft/exwordnet)
+[![Coverage Status](https://coveralls.io/repos/github/indocomsoft/exwordnet/badge.svg?branch=master)](https://coveralls.io/github/indocomsoft/exwordnet?branch=master)
+
+A pure Elixir interface to the WordNet lexical/semantic database.
+
+`ExWordNet` doesn't require you to convert the original WordNet database into a new database format;
+instead it can work directly on the database that comes with WordNet.
+
+`ExWordNet` is inspired by the Ruby project ![rwordnet](https://github.com/doches/rwordnet).
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `exwordnet` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `exwordnet` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -15,7 +22,7 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/exwordnet](https://hexdocs.pm/exwordnet).
+`ExWordNet` comes bundled with the WordNet database which it uses by default,
+so there's absolutely nothing else to download, install, or configure.
 
+The docs can be found at [https://hexdocs.pm/exwordnet](https://hexdocs.pm/exwordnet).
