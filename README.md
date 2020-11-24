@@ -1,6 +1,6 @@
 # [WIP] ExWordNet
 
-[![Build Status](https://travis-ci.com/indocomsoft/exwordnet.svg?branch=master)](https://travis-ci.com/indocomsoft/exwordnet)
+![Build Status](https://github.com/indocomsoft/exwordnet/workflows/Elixir%20CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/indocomsoft/exwordnet/badge.svg?branch=master)](https://coveralls.io/github/indocomsoft/exwordnet?branch=master)
 
 A pure Elixir interface to the WordNet lexical/semantic database.
